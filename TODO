@@ -1,0 +1,24 @@
+
+High priority:
+- Add support for all keys.
+- Add support for window menus.
+- Fix application leak.
+- Adjust window size correctly, so that given size is equal to main window client size.
+
+Medium priority:
+- Add support for text rendering?
+- Add setting to control antialiasing.
+- Add setting to enable fps counter.
+- Add setting to configure video mode.
+- Save settings.
+- Add glut geometry functions.
+- Display standard output on embedded console.
+- Display FPS counter.
+
+Low priority:
+- Add support for multiple windows.
+- Add support for overlays.
+- Add support for window hierarchies.
+- Add support for dial callbacks?
+- Add support for table & spaceball callbacks?
+
