@@ -5,6 +5,7 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QCursor>
+#include <QtGui/QDesktopWidget>
 
 #include <GL/glut.h>
 
@@ -456,10 +457,20 @@ int glutGet(GLenum state)
 		//     One if the current window is stereo, zero otherwise. 
 		// GLUT_WINDOW_CURSOR
 		//     Current cursor for the current window. 
-		// GLUT_SCREEN_WIDTH
-		//     Width of the screen in pixels. Zero indicates the width is unknown or not available. 
-		// GLUT_SCREEN_HEIGHT
-		//     Height of the screen in pixels. Zero indicates the height is unknown or not available. 
+		case GLUT_SCREEN_WIDTH:
+		{
+			// Width of the screen in pixels. Zero indicates the width is unknown or not available. 
+			QDesktopWidget desktop;
+			QRect rect = desktop.screenGeometry(s.mainWindow);
+			return rect.width();
+		}
+		case GLUT_SCREEN_HEIGHT:
+		{
+			// Height of the screen in pixels. Zero indicates the height is unknown or not available. 
+			QDesktopWidget desktop;
+			QRect rect = desktop.screenGeometry(s.mainWindow);
+			return rect.height();
+		}
 		case GLUT_SCREEN_WIDTH_MM:
 			return 0;	// unknown
 		case GLUT_SCREEN_HEIGHT_MM:
