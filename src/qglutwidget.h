@@ -16,22 +16,22 @@ public:
 	~QGlutMainWindow();
 
 	QGlutWidget * glutWidget();
-	
+
 	void setSize(int w, int h);
 	//virtual QSize sizeHint () const;
-	
+
 public slots:
-	
+
 	void toggleFullScreen(bool checked);
 	void toggleShowMenu(bool checked);
-	
+
 private:
-	
+
 	bool clientSizeSet;
 	int clientWidth;
 	int clientHeight;
 	bool showMenu;
-	
+
 };
 
 
@@ -57,10 +57,10 @@ public:
 	void setSpecialFunc(void (*func)(int key, int x, int y));
 	void setSpecialUpFunc(void (*func)(int key, int x, int y));
 	void setCloseFunc(void (*func)(void));
-	
+
 	void ignoreKeyRepeat(bool ignore);
-	
-	
+
+
 protected:
 
 	virtual void initializeGL();
@@ -69,22 +69,22 @@ protected:
 
 	virtual void keyPressEvent(QKeyEvent * event);
 	virtual void keyReleaseEvent(QKeyEvent * event);
-	
+
 	virtual void mouseMoveEvent(QMouseEvent * event);
 	virtual void mousePressEvent(QMouseEvent * event);
 	virtual void mouseReleaseEvent(QMouseEvent * event);
 	virtual void wheelEvent(QWheelEvent * event);
-	
+
 	virtual void closeEvent(QCloseEvent * event);
-	
+
 	virtual void enterEvent(QEvent * event);
 	virtual void leaveEvent(QEvent * event);
-	
+
 	virtual void hideEvent(QHideEvent * event);
 	virtual void showEvent(QShowEvent * event);
-	
 
-	
+
+
 private:
 
 	void (*displayFunc)(void);
@@ -103,7 +103,7 @@ private:
 	void (*closeFunc)(void);
 
 	bool m_ignoreKeyRepeat;
-	
+
 };
 
 

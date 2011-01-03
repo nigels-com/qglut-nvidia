@@ -64,20 +64,20 @@ QGlutMainWindow::QGlutMainWindow(const QGLFormat & format) : clientSizeSet(true)
 	QGlutWidget * widget = new QGlutWidget(format, this);
 	setCentralWidget(widget);
 	widget->setFocus();
-	
+
 	// Create menu.
 	QAction * action = NULL;
-	
+
 	QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
-	
+
 	action = new QAction(tr("E&xit"), this);
 	action->setShortcut(tr("Ctrl+Q"));
 	action->setStatusTip(tr("Exit the application"));
 	connect(action, SIGNAL(triggered()), this, SLOT(close()));
 	fileMenu->addAction(action);
-	
+
 	QMenu * settingsMenu = menuBar()->addMenu(tr("&Settings"));
-	
+
 	action = new QAction(tr("&Toggle fullscreen"), this);
 	action->setShortcut(tr("Ctrl+Shift+F"));
 	action->setCheckable(true);
@@ -85,7 +85,7 @@ QGlutMainWindow::QGlutMainWindow(const QGLFormat & format) : clientSizeSet(true)
 	connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleFullScreen(bool)));
 	settingsMenu->addAction(action);
 	this->addAction(action);
-	
+
 	action = new QAction(tr("&Show menu bar"), this);
 	action->setShortcut(tr("Ctrl+M"));
 	action->setCheckable(true);
@@ -94,9 +94,9 @@ QGlutMainWindow::QGlutMainWindow(const QGLFormat & format) : clientSizeSet(true)
 	settingsMenu->addAction(action);
 	this->addAction(action);
 	showMenu = true;
-	
+
 	// @@ Add antialiasing settings?
-	
+
 	QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
 
 	action = new QAction(tr("&About"), this);
@@ -113,7 +113,7 @@ QGlutMainWindow::QGlutMainWindow(const QGLFormat & format) : clientSizeSet(true)
 QGlutMainWindow::~QGlutMainWindow()
 {
 }
-	
+
 QGlutWidget * QGlutMainWindow::glutWidget()
 {
 	return (QGlutWidget *)centralWidget();
@@ -122,8 +122,8 @@ QGlutWidget * QGlutMainWindow::glutWidget()
 void QGlutMainWindow::setSize(int w, int h)
 {
 	clientSizeSet = true;
-	clientWidth = w; 
-	clientHeight = h; 
+	clientWidth = w;
+	clientHeight = h;
 }
 
 
@@ -175,7 +175,7 @@ QGlutWidget::QGlutWidget(const QGLFormat & format, QWidget * parent) : QGLWidget
 {
 	setAutoBufferSwap(false);
 	setFocusPolicy(Qt::ClickFocus);
-	
+
 	setMinimumSize(128, 128);
 }
 
@@ -217,7 +217,7 @@ void QGlutWidget::keyPressEvent(QKeyEvent * event)
 
 	QPoint p = this->mapFromGlobal(QCursor::pos());
 	int key = event->key();
-	
+
 	if (keyboardFunc != NULL) {
 		if (key >= Qt::Key_A && key <= Qt::Key_Z) keyboardFunc(key - Qt::Key_A + 'a', p.x(), p.y());
 		if (key == Qt::Key_Escape) keyboardFunc(27, p.x(), p.y());
@@ -228,15 +228,15 @@ void QGlutWidget::keyPressEvent(QKeyEvent * event)
 	}
 	if (specialFunc != NULL) {
 		if (key >= Qt::Key_F1 && key <= Qt::Key_F12) specialFunc(key - Qt::Key_F1 + GLUT_KEY_F1, p.x(), p.y());
-		
+
 		if (key == Qt::Key_Left) specialFunc(GLUT_KEY_LEFT, p.x(), p.y());
 		if (key == Qt::Key_Up) specialFunc(GLUT_KEY_UP, p.x(), p.y());
 		if (key == Qt::Key_Right) specialFunc(GLUT_KEY_RIGHT, p.x(), p.y());
 		if (key == Qt::Key_Down) specialFunc(GLUT_KEY_DOWN, p.x(), p.y());
-		
+
 		if (key == Qt::Key_PageUp) specialFunc(GLUT_KEY_PAGE_UP, p.x(), p.y());
 		if (key == Qt::Key_PageDown) specialFunc(GLUT_KEY_PAGE_DOWN, p.x(), p.y());
-		
+
 		if (key == Qt::Key_Home) specialFunc(GLUT_KEY_HOME, p.x(), p.y());
 		if (key == Qt::Key_End) specialFunc(GLUT_KEY_END, p.x(), p.y());
 		if (key == Qt::Key_Insert) specialFunc(GLUT_KEY_INSERT, p.x(), p.y());
@@ -247,7 +247,7 @@ void QGlutWidget::keyReleaseEvent(QKeyEvent * event)
 {
 	QPoint p = mapFromGlobal(QCursor::pos());
 	int key = event->key();
-	
+
 	if (keyboardUpFunc != NULL) {
 		if (key >= Qt::Key_A && key <= Qt::Key_Z) keyboardUpFunc(key - Qt::Key_A + 'a', p.x(), p.y());
 		if (key == Qt::Key_Escape) keyboardUpFunc(27, p.x(), p.y());
@@ -282,7 +282,7 @@ void QGlutWidget::mousePressEvent(QMouseEvent * event)
 		if (event->button() == Qt::LeftButton) button = GLUT_LEFT_BUTTON;
 		else if (event->button() == Qt::RightButton) button = GLUT_RIGHT_BUTTON;
 		else if (event->button() == Qt::MidButton) button = GLUT_MIDDLE_BUTTON;
-		
+
 		if (button != -1) {
 			mouseFunc(button, GLUT_DOWN, event->x(), event->y());
 		}
@@ -296,7 +296,7 @@ void QGlutWidget::mouseReleaseEvent(QMouseEvent * event)
 		if (event->button() == Qt::LeftButton) button = GLUT_LEFT_BUTTON;
 		else if (event->button() == Qt::RightButton) button = GLUT_RIGHT_BUTTON;
 		else if (event->button() == Qt::MidButton) button = GLUT_MIDDLE_BUTTON;
-		
+
 		if (button != -1) {
 			mouseFunc(button, GLUT_UP, event->x(), event->y());
 		}
@@ -322,7 +322,7 @@ void QGlutWidget::wheelEvent(QWheelEvent * event)
 void QGlutWidget::closeEvent(QCloseEvent * event)
 {
 	Q_UNUSED(event);
-	
+
 	if (closeFunc != NULL) {
 		closeFunc();
 	}
@@ -331,7 +331,7 @@ void QGlutWidget::closeEvent(QCloseEvent * event)
 void QGlutWidget::enterEvent(QEvent * event)
 {
 	Q_UNUSED(event);
-	
+
 	if (entryFunc != NULL) {
 		entryFunc(GLUT_ENTERED);
 	}
@@ -339,7 +339,7 @@ void QGlutWidget::enterEvent(QEvent * event)
 void QGlutWidget::leaveEvent(QEvent * event)
 {
 	Q_UNUSED(event);
-	
+
 	if (entryFunc != NULL) {
 		entryFunc(GLUT_LEFT);
 	}
@@ -348,7 +348,7 @@ void QGlutWidget::leaveEvent(QEvent * event)
 void QGlutWidget::hideEvent(QHideEvent * event)
 {
 	Q_UNUSED(event);
-	
+
 	if (statusFunc != NULL) {
 		statusFunc(GLUT_HIDDEN);
 	}
@@ -359,7 +359,7 @@ void QGlutWidget::hideEvent(QHideEvent * event)
 void QGlutWidget::showEvent(QShowEvent * event)
 {
 	Q_UNUSED(event);
-	
+
 	if (statusFunc != NULL) {
 		// @@ Determine if the window is partially covered or not.
 		statusFunc(GLUT_PARTIALLY_RETAINED);
