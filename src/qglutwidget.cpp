@@ -59,7 +59,7 @@ http://dslweb.nwnexus.com/~ast/dload/guicon.htm
 
 */
 
-QGlutMainWindow::QGlutMainWindow(const QGLFormat & format) : clientSizeSet(true)
+QGlutMainWindow::QGlutMainWindow(const QGLFormat & format)
 {
 	QGlutWidget * widget = new QGlutWidget(format, this);
 	setCentralWidget(widget);
@@ -121,11 +121,17 @@ QGlutWidget * QGlutMainWindow::glutWidget()
 
 void QGlutMainWindow::setSize(int w, int h)
 {
-	clientSizeSet = true;
-	clientWidth = w;
-	clientHeight = h;
-}
+	// This only works right if QMainWindow::show
+	// has already been called to establish the
+	// default size of the central widget
 
+	show();
+
+	QSize s(w,h);
+	s += size();
+	s -= centralWidget()->size();
+	resize(s);
+}
 
 void QGlutMainWindow::toggleFullScreen(bool checked)
 {

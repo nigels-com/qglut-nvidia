@@ -27,11 +27,7 @@ public slots:
 
 private:
 
-	bool clientSizeSet;
-	int clientWidth;
-	int clientHeight;
 	bool showMenu;
-
 };
 
 

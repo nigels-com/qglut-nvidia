@@ -220,14 +220,18 @@ int glutCreateWindow(const char * name)
 	s.mainWindow->setWindowTitle(name);
 	s.mainWindow->show();
 
-	s.window = s.mainWindow->glutWidget();
-
-	if (s.sizeSet) {
-		s.mainWindow->resize(s.width, s.height);
-		//s.window->setSize(s.width, s.height);
-	}
 	if (s.posSet) {
 		s.mainWindow->move(s.x, s.y);
+	}
+
+	s.window = s.mainWindow->glutWidget();
+
+	// This only works right if QMainWindow::show
+	// has already been called to establish the
+	// default size of the central widget
+
+	if (s.sizeSet) {
+		s.mainWindow->setSize(s.width, s.height);
 	}
 
 	// On OSX the window won't be at the front
