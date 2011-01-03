@@ -441,7 +441,7 @@ void QGlutWidget::setCloseFunc(void (*func)(void))
 	closeFunc = func;
 }
 
-bool QGlutWidget::ignoreKeyRepeat(bool ignore)
+void QGlutWidget::ignoreKeyRepeat(bool ignore)
 {
 	m_ignoreKeyRepeat = ignore;
 }

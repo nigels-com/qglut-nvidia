@@ -58,7 +58,7 @@ public:
 	void setSpecialUpFunc(void (*func)(int key, int x, int y));
 	void setCloseFunc(void (*func)(void));
 	
-	bool ignoreKeyRepeat(bool ignore);
+	void ignoreKeyRepeat(bool ignore);
 	
 	
 protected:
