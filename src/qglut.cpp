@@ -58,6 +58,9 @@ static void cleanup()
 	}
 }
 
+extern "C"
+{
+
 /** Init GLUT application. */
 void glutInit(int *argc, char **argv)
 {
@@ -324,13 +327,13 @@ void glutIconifyWindow(void)
 }
 
 
-void glutSetWindowTitle(char *name)
+void glutSetWindowTitle(const char *name)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->setWindowTitle(name);
 }
 
-void glutSetIconTitle(char *name)
+void glutSetIconTitle(const char *name)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->setWindowIconText(name);
@@ -524,7 +527,7 @@ int glutGetModifiers(void)
 }
 
 
-int glutExtensionSupported(char *extension)
+int glutExtensionSupported(const char *extension)
 {
 	const char * extensions = (const char *)glGetString(GL_EXTENSIONS);
 	return strstr(extensions, extension) != NULL;
@@ -660,6 +663,7 @@ void glutWMCloseFunc(void (*func)(void))
 int glutCreateMenu(void (*func)(int value))
 {
 	// @@
+	return 0;
 }
 
 void glutSetMenu(int menu)
@@ -670,6 +674,7 @@ void glutSetMenu(int menu)
 int glutGetMenu(void)
 {
 	// @@
+	return 0;
 }
 
 void glutDestroyMenu(int menu)
@@ -720,5 +725,7 @@ void glutIgnoreKeyRepeat(int ignore)
 {
 	glutAssert(s.window != NULL);
 	s.window->ignoreKeyRepeat(ignore != 0);
+}
+
 }
 
