@@ -425,46 +425,32 @@ int glutGet(GLenum state)
 	glutAssert(false);
 
 	switch(state) {
-		case GLUT_WINDOW_X:
-			return s.mainWindow->x();
-		case GLUT_WINDOW_Y:
-			return s.mainWindow->y();
-		case GLUT_WINDOW_WIDTH:
-			return s.mainWindow->width();
-		case GLUT_WINDOW_HEIGHT:
-			return s.mainWindow->height();
-		// GLUT_WINDOW_BUFFER_SIZE
-		//     Total number of bits for current window's color buffer. For an RGBA window, this is the sum of GLUT_WINDOW_RED_SIZE, GLUT_WINDOW_GREEN_SIZE, GLUT_WINDOW_BLUE_SIZE, and GLUT_WINDOW_ALPHA_SIZE. For color index windows, this is the size of the color indexes.
-		// GLUT_WINDOW_STENCIL_SIZE
-		//     Number of bits in the current window's stencil buffer.
-		// GLUT_WINDOW_DEPTH_SIZE
-		//     Number of bits in the current window's depth buffer.
-		// GLUT_WINDOW_RED_SIZE
-		//     Number of bits of red stored the current window's color buffer. Zero if the window is color index.
-		// GLUT_WINDOW_GREEN_SIZE
-		//     Number of bits of green stored the current window's color buffer. Zero if the window is color index.
-		// GLUT_WINDOW_BLUE_SIZE
-		//     Number of bits of blue stored the current window's color buffer. Zero if the window is color index.
-		// GLUT_WINDOW_ALPHA_SIZE
-		//     Number of bits of alpha stored the current window's color buffer. Zero if the window is color index.
-		// GLUT_WINDOW_ACCUM_RED_SIZE
-		//     Number of bits of red stored in the current window's accumulation buffer. Zero if the window is color index.
-		// GLUT_WINDOW_ACCUM_GREEN_SIZE
-		//     Number of bits of green stored in the current window's accumulation buffer. Zero if the window is color index.
-		// GLUT_WINDOW_ACCUM_BLUE_SIZE
-		//     Number of bits of blue stored in the current window's accumulation buffer. Zero if the window is color index.
-		// GLUT_WINDOW_ACCUM_ALPHA_SIZE
-		//     Number of bits of alpha stored in the current window's accumulation buffer. Zero if the window is color index.
-		// GLUT_WINDOW_DOUBLEBUFFER
-		//     One if the current window is double buffered, zero otherwise.
-		// GLUT_WINDOW_RGBA
-		//     One if the current window is RGBA mode, zero otherwise (i.e., color index).
-		// GLUT_WINDOW_PARENT
-		//     The window number of the current window's parent; zero if the window is a top-level window.
-		// GLUT_WINDOW_NUM_CHILDREN
-		//     The number of subwindows the current window has (not counting children of children).
-		// GLUT_WINDOW_COLORMAP_SIZE
-		//     Size of current window's color index colormap; zero for RGBA color model windows.
+		case GLUT_WINDOW_X:                  return s.mainWindow->x();
+		case GLUT_WINDOW_Y:                  return s.mainWindow->y();
+		case GLUT_WINDOW_WIDTH:              return s.mainWindow->width();
+		case GLUT_WINDOW_HEIGHT:             return s.mainWindow->height();
+		case GLUT_WINDOW_BUFFER_SIZE:        return s.window->format().rgba() ?
+								s.window->format().redBufferSize()   +
+								s.window->format().greenBufferSize() +
+								s.window->format().blueBufferSize()  +
+								s.window->format().alphaBufferSize() : 0;
+		case GLUT_WINDOW_STENCIL_SIZE:       return s.window->format().stencilBufferSize();
+		case GLUT_WINDOW_DEPTH_SIZE:         return s.window->format().depthBufferSize();
+		case GLUT_WINDOW_RED_SIZE:           return s.window->format().rgba() ? s.window->format().redBufferSize()   : 0;
+		case GLUT_WINDOW_GREEN_SIZE:         return s.window->format().rgba() ? s.window->format().greenBufferSize() : 0;
+		case GLUT_WINDOW_BLUE_SIZE:          return s.window->format().rgba() ? s.window->format().blueBufferSize()  : 0;
+		case GLUT_WINDOW_ALPHA_SIZE:         return s.window->format().rgba() ? s.window->format().alphaBufferSize() : 0;
+		case GLUT_WINDOW_ACCUM_RED_SIZE:
+		case GLUT_WINDOW_ACCUM_GREEN_SIZE:
+		case GLUT_WINDOW_ACCUM_BLUE_SIZE:    return s.window->format().rgba() ? s.window->format().accumBufferSize() : 0;
+		case GLUT_WINDOW_ACCUM_ALPHA_SIZE:   return s.window->format().rgba() && s.window->format().alpha() ? s.window->format().accumBufferSize() : 0;
+		case GLUT_WINDOW_DOUBLEBUFFER:       return s.window->format().doubleBuffer()  ? 1 : 0;
+		case GLUT_WINDOW_RGBA:               return s.window->format().rgba() ? 1 : 0;
+
+		case GLUT_WINDOW_PARENT:             return 0; /* No children in QGlut         */
+		case GLUT_WINDOW_NUM_CHILDREN:       return 0; /* No children in QGlut         */
+		case GLUT_WINDOW_COLORMAP_SIZE:      return 0; /* QGlut supports only RGA mode */
+
 		// GLUT_WINDOW_NUM_SAMPLES
 		//     Number of samples for multisampling for the current window.
 		// GLUT_WINDOW_STEREO
@@ -491,7 +477,8 @@ int glutGet(GLenum state)
 			return 0;	// unknown
 		// GLUT_MENU_NUM_ITEMS
 		//     Number of menu items in the current menu.
-		// GLUT_DISPLAY_MODE_POSSIBLE
+		case GLUT_DISPLAY_MODE_POSSIBLE:
+			return 1; // TODO - revisit
 		//     Whether the current display mode is supported or not.
 		// GLUT_INIT_DISPLAY_MODE
 		//     The initial display mode bit mask.
