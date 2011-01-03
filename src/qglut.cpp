@@ -1,7 +1,8 @@
 
 #define glutAssert(expr)
 
-#include <string.h>	// strstr
+#include <cstdio>   // fprintf
+#include <cstring>  // strstr
 
 #include <QtGui/QApplication>
 #include <QtGui/QCursor>
@@ -11,6 +12,8 @@
 
 #include "qglutapp.h"
 #include "qglutwidget.h"
+
+using namespace std;
 
 namespace
 {
