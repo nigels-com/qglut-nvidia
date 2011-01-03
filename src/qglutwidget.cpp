@@ -211,6 +211,7 @@ void QGlutWidget::resizeGL(int width, int height)
 		reshapeFunc(width, height);
 	}
 	else {
+		glScissor(0, 0, width, height);
 		glViewport(0, 0, width, height);
 	}
 }
