@@ -215,6 +215,7 @@ int glutCreateWindow(const char * name)
 {
 	s.mainWindow = new QGlutMainWindow(s.format);
 	s.mainWindow->setWindowTitle(name);
+	s.mainWindow->show();
 	
 	s.window = s.mainWindow->glutWidget();
 	
@@ -226,8 +227,11 @@ int glutCreateWindow(const char * name)
 		s.mainWindow->move(s.x, s.y);
 	}
 	
-	s.mainWindow->show();
-	
+	// On OSX the window won't be at the front
+	// unless it is explicitly raised
+
+	s.mainWindow->raise();
+
 	// @@ Add support for multiple windows.
 	return 0;
 }
