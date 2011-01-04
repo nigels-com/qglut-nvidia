@@ -62,27 +62,34 @@ extern "C"
 {
 
 /** Init GLUT application. */
-void APIENTRY glutInit(int *argc, char **argv)
+GLUT_APIENTRY void glutInit(int *argc, char **argv)
 {
 	s.app = new QGlutApplication(*argc, argv);
 	//atexit(cleanup);
 }
 
-void APIENTRY glutInitWindowSize(int width, int height)
+#ifdef WIN32
+GLUT_APIENTRY void __glutInitWithExit(int *argc, char **argv, void (__cdecl *exitfunc)(int))
+{
+  glutInit(argc,argv);
+}
+#endif
+
+GLUT_APIENTRY void glutInitWindowSize(int width, int height)
 {
 	s.sizeSet = true;
 	s.width = width;
 	s.height = height;
 }
 
-void APIENTRY glutInitWindowPosition(int x, int y)
+GLUT_APIENTRY void glutInitWindowPosition(int x, int y)
 {
 	s.posSet = true;
 	s.x = x;
 	s.y = y;
 }
 
-void APIENTRY glutInitDisplayMode(unsigned int mode)
+GLUT_APIENTRY void glutInitDisplayMode(unsigned int mode)
 {
 	s.format = QGLFormat::defaultFormat();
 
@@ -103,7 +110,7 @@ void APIENTRY glutInitDisplayMode(unsigned int mode)
 }
 
 
-void APIENTRY glutInitDisplayString(const char * str)
+GLUT_APIENTRY void glutInitDisplayString(const char * str)
 {
 	s.format = QGLFormat::defaultFormat();
 
@@ -206,7 +213,7 @@ void APIENTRY glutInitDisplayString(const char * str)
 
 
 /** glutMainLoop enters the GLUT event processing loop. */
-void APIENTRY glutMainLoop(void)
+GLUT_APIENTRY void glutMainLoop(void)
 {
 	glutAssert(app != NULL);
 	s.app->exec();
@@ -214,7 +221,7 @@ void APIENTRY glutMainLoop(void)
 
 
 /** glutCreateWindow creates a top-level window. */
-int APIENTRY glutCreateWindow(const char * name)
+GLUT_APIENTRY int glutCreateWindow(const char * name)
 {
 	s.mainWindow = new QGlutMainWindow(s.format);
 	s.mainWindow->setWindowTitle(name);
@@ -243,19 +250,26 @@ int APIENTRY glutCreateWindow(const char * name)
 	return 0;
 }
 
-void APIENTRY glutSetWindow(int win)
+#ifdef WIN32
+GLUT_APIENTRY int __glutCreateWindowWithExit(const char *title, void (__cdecl *exitfunc)(int))
+{
+  return glutCreateWindow(title);
+}
+#endif
+
+GLUT_APIENTRY void glutSetWindow(int win)
 {
 	// @@ Add support for multiple windows.
 }
 
-int APIENTRY glutGetWindow(void)
+GLUT_APIENTRY int glutGetWindow(void)
 {
 	// @@ Add support for multiple windows.
 	return 0;
 }
 
 
-void APIENTRY glutDestroyWindow(int win)
+GLUT_APIENTRY void glutDestroyWindow(int win)
 {
 	// @@ Add support for multiple windows.
 	if (win == 0) {
@@ -267,63 +281,63 @@ void APIENTRY glutDestroyWindow(int win)
 }
 
 
-void APIENTRY glutPostRedisplay(void)
+GLUT_APIENTRY void glutPostRedisplay(void)
 {
 	glutAssert(s.window != NULL);
 	s.window->updateGL();
 }
 
-void APIENTRY glutSwapBuffers(void)
+GLUT_APIENTRY void glutSwapBuffers(void)
 {
 	glutAssert(s.window != NULL);
 	s.window->swapBuffers();
 }
 
-void APIENTRY glutPositionWindow(int x, int y)
+GLUT_APIENTRY void glutPositionWindow(int x, int y)
 {
 	glutAssert(s.mainWindow != NULL);
 	s.mainWindow->toggleFullScreen(false);
 	s.mainWindow->move(x, y);
 }
 
-void APIENTRY glutReshapeWindow(int width, int height)
+GLUT_APIENTRY void glutReshapeWindow(int width, int height)
 {
 	glutAssert(s.mainWindow != NULL);
 	s.mainWindow->toggleFullScreen(false);
 	s.mainWindow->resize(width, height);
 }
 
-void APIENTRY glutFullScreen(void)
+GLUT_APIENTRY void glutFullScreen(void)
 {
 	glutAssert(s.mainWindow != NULL);
 	s.mainWindow->toggleFullScreen(true);
 }
 
-void APIENTRY glutPopWindow(void)
+GLUT_APIENTRY void glutPopWindow(void)
 {
 	glutAssert(false);
 	// @@ Add support for multiple windows.
 }
 
-void APIENTRY glutPushWindow(void)
+GLUT_APIENTRY void glutPushWindow(void)
 {
 	glutAssert(false);
 	// @@ Add support for multiple windows.
 }
 
-void APIENTRY glutShowWindow(void)
+GLUT_APIENTRY void glutShowWindow(void)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->show();
 }
 
-void APIENTRY glutHideWindow(void)
+GLUT_APIENTRY void glutHideWindow(void)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->hide();
 }
 
-void APIENTRY glutIconifyWindow(void)
+GLUT_APIENTRY void glutIconifyWindow(void)
 {
 	glutAssert(s.window != NULL);
 //	s.mainWindow->showMinimized();
@@ -331,27 +345,27 @@ void APIENTRY glutIconifyWindow(void)
 }
 
 
-void APIENTRY glutSetWindowTitle(const char *name)
+GLUT_APIENTRY void glutSetWindowTitle(const char *name)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->setWindowTitle(name);
 }
 
-void APIENTRY glutSetIconTitle(const char *name)
+GLUT_APIENTRY void glutSetIconTitle(const char *name)
 {
 	glutAssert(s.window != NULL);
 	s.mainWindow->setWindowIconText(name);
 }
 
 
-void APIENTRY glutWarpPointer(int x, int y)
+GLUT_APIENTRY void glutWarpPointer(int x, int y)
 {
 	glutAssert(s.window != NULL);
 	QPoint pos = s.window->mapToGlobal(QPoint(x, y));
 	QCursor::setPos(pos);
 }
 
-void APIENTRY glutSetCursor(int shape)
+GLUT_APIENTRY void glutSetCursor(int shape)
 {
 	QCursor cursor;
 	switch(shape) {
@@ -420,7 +434,7 @@ void APIENTRY glutSetCursor(int shape)
 }
 
 
-int APIENTRY glutGet(GLenum state)
+GLUT_APIENTRY int glutGet(GLenum state)
 {
 	glutAssert(false);
 
@@ -498,7 +512,7 @@ int APIENTRY glutGet(GLenum state)
 }
 
 
-int APIENTRY glutGetModifiers(void)
+GLUT_APIENTRY int glutGetModifiers(void)
 {
 	// @@ Ask the current window instead of the application.
 	int glutModifier = 0;
@@ -518,13 +532,13 @@ int APIENTRY glutGetModifiers(void)
 }
 
 
-int APIENTRY glutExtensionSupported(const char *extension)
+GLUT_APIENTRY int glutExtensionSupported(const char *extension)
 {
 	const char * extensions = (const char *)glGetString(GL_EXTENSIONS);
 	return strstr(extensions, extension) != NULL;
 }
 
-void APIENTRY glutReportErrors()
+GLUT_APIENTRY void glutReportErrors()
 {
 	while(true)
 	{
@@ -542,107 +556,107 @@ void APIENTRY glutReportErrors()
 }
 
 
-void APIENTRY glutDisplayFunc(void (*func)(void))
+GLUT_APIENTRY void glutDisplayFunc(void (*func)(void))
 {
 	glutAssert(s.window != NULL);
 	s.window->setDisplayFunc(func);
 }
 
-void APIENTRY glutOverlayDisplayFunc(void (*func)(void))
+GLUT_APIENTRY void glutOverlayDisplayFunc(void (*func)(void))
 {
 	glutAssert(s.window != NULL);
 	s.window->setOverlayDisplayFunc(func);
 }
 
-void APIENTRY glutReshapeFunc(void (*func)(int width, int height))
+GLUT_APIENTRY void glutReshapeFunc(void (*func)(int width, int height))
 {
 	glutAssert(s.window != NULL);
 	s.window->setReshapeFunc(func);
 }
 
-void APIENTRY glutKeyboardFunc(void (*func)(unsigned char key, int x, int y))
+GLUT_APIENTRY void glutKeyboardFunc(void (*func)(unsigned char key, int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setKeyboardFunc(func);
 }
 
-void APIENTRY glutKeyboardUpFunc(void (*func)(unsigned char key, int x, int y))
+GLUT_APIENTRY void glutKeyboardUpFunc(void (*func)(unsigned char key, int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setKeyboardUpFunc(func);
 }
 
-void APIENTRY glutMouseFunc(void (*func)(int button, int state, int x, int y))
+GLUT_APIENTRY void glutMouseFunc(void (*func)(int button, int state, int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setMouseFunc(func);
 }
 
-void APIENTRY glutMotionFunc(void (*func)(int x, int y))
+GLUT_APIENTRY void glutMotionFunc(void (*func)(int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setMotionFunc(func);
 }
 
-void APIENTRY glutPassiveMotionFunc(void (*func)(int x, int y))
+GLUT_APIENTRY void glutPassiveMotionFunc(void (*func)(int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setPassiveMotionFunc(func);
 }
 
-void APIENTRY glutVisibilityFunc(void (*func)(int state))
+GLUT_APIENTRY void glutVisibilityFunc(void (*func)(int state))
 {
 	glutAssert(s.window != NULL);
 	s.window->setVisibilityFunc(func);
 }
 
-void APIENTRY glutWindowStatusFunc(void (*func)(int state))
+GLUT_APIENTRY void glutWindowStatusFunc(void (*func)(int state))
 {
 	glutAssert(s.window != NULL);
 	s.window->setStatusFunc(func);
 }
 
-void APIENTRY glutEntryFunc(void (*func)(int state))
+GLUT_APIENTRY void glutEntryFunc(void (*func)(int state))
 {
 	glutAssert(s.window != NULL);
 	s.window->setEntryFunc(func);
 }
 
-void APIENTRY glutSpecialFunc(void (*func)(int key, int x, int y))
+GLUT_APIENTRY void glutSpecialFunc(void (*func)(int key, int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setSpecialFunc(func);
 }
 
-void APIENTRY glutSpecialUpFunc(void (*func)(int key, int x, int y))
+GLUT_APIENTRY void glutSpecialUpFunc(void (*func)(int key, int x, int y))
 {
 	glutAssert(s.window != NULL);
 	s.window->setSpecialUpFunc(func);
 }
 
-void APIENTRY glutMenuStatusFunc(void (*func)(int status, int x, int y))
+GLUT_APIENTRY void glutMenuStatusFunc(void (*func)(int status, int x, int y))
 {
 	// @@
 }
 
-void APIENTRY glutMenuStateFunc(void (*func)(int status))
+GLUT_APIENTRY void glutMenuStateFunc(void (*func)(int status))
 {
 	// @@
 }
 
-void APIENTRY glutIdleFunc(void (*func)(void))
+GLUT_APIENTRY void glutIdleFunc(void (*func)(void))
 {
 	glutAssert(s.window != NULL);
 	s.app->setIdleFunc(func);
 }
 
-void APIENTRY glutTimerFunc(unsigned int msecs, void (*func)(int value), int value)
+GLUT_APIENTRY void glutTimerFunc(unsigned int msecs, void (*func)(int value), int value)
 {
 	glutAssert(s.window != NULL);
 	s.app->setTimerFunc(msecs, func, value);
 }
 
-void APIENTRY glutWMCloseFunc(void (*func)(void))
+GLUT_APIENTRY void glutWMCloseFunc(void (*func)(void))
 {
 	glutAssert(s.window != NULL);
 	s.window->setCloseFunc(func);
@@ -651,68 +665,76 @@ void APIENTRY glutWMCloseFunc(void (*func)(void))
 
 // Menu functions
 
-int APIENTRY glutCreateMenu(void (*func)(int value))
+GLUT_APIENTRY int glutCreateMenu(void (*func)(int value))
 {
 	// @@
 	return 0;
 }
 
-void APIENTRY glutSetMenu(int menu)
+#ifdef WIN32
+GLUT_APIENTRY int __glutCreateMenuWithExit(void (*func)(int value), void (__cdecl *exitfunc)(int))
+{
+	// @@
+	return 0;
+}
+#endif
+
+GLUT_APIENTRY void glutSetMenu(int menu)
 {
 	// @@
 }
 
-int APIENTRY glutGetMenu(void)
+GLUT_APIENTRY int glutGetMenu(void)
 {
 	// @@
 	return 0;
 }
 
-void APIENTRY glutDestroyMenu(int menu)
+GLUT_APIENTRY void glutDestroyMenu(int menu)
 {
 	// @@
 }
 
-void APIENTRY glutAddMenuEntry(const char *name, int value)
+GLUT_APIENTRY void glutAddMenuEntry(const char *name, int value)
 {
 	Q_UNUSED(name);
 	Q_UNUSED(value);
 	// @@
 }
 
-void APIENTRY glutAddSubMenu(const char *name, int menu)
+GLUT_APIENTRY void glutAddSubMenu(const char *name, int menu)
 {
 	Q_UNUSED(name);
 	Q_UNUSED(menu);
 	// @@
 }
 
-void APIENTRY glutChangeToMenuEntry(int entry, const char *name, int value)
+GLUT_APIENTRY void glutChangeToMenuEntry(int entry, const char *name, int value)
 {
 	// @@
 }
 
-void APIENTRY glutChangeToSubMenu(int entry, const char *name, int menu)
+GLUT_APIENTRY void glutChangeToSubMenu(int entry, const char *name, int menu)
 {
 	// @@
 }
 
-void APIENTRY glutRemoveMenuItem(int entry)
+GLUT_APIENTRY void glutRemoveMenuItem(int entry)
 {
 	// @@
 }
 
-void APIENTRY glutAttachMenu(int button)
+GLUT_APIENTRY void glutAttachMenu(int button)
 {
 	// @@
 }
 
-void APIENTRY glutDetachMenu(int button)
+GLUT_APIENTRY void glutDetachMenu(int button)
 {
 	// @@
 }
 
-void APIENTRY glutIgnoreKeyRepeat(int ignore)
+GLUT_APIENTRY void glutIgnoreKeyRepeat(int ignore)
 {
 	glutAssert(s.window != NULL);
 	s.window->ignoreKeyRepeat(ignore != 0);
