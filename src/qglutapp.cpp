@@ -1,5 +1,7 @@
-
 #include "qglutapp.h"
+
+#include <cstdio>
+using namespace std;
 
 QGlutApplication::QGlutApplication(int & argc, char ** argv) : QApplication(argc, argv), idleFunc(NULL)
 {
@@ -10,6 +12,11 @@ QGlutApplication::QGlutApplication(int & argc, char ** argv) : QApplication(argc
 
 QGlutApplication::~QGlutApplication()
 {
+}
+
+void QGlutApplication::aboutQGlut()
+{
+	printf("QGlutApplication::aboutQGlut\n");
 }
 
 void QGlutApplication::updateIdle()

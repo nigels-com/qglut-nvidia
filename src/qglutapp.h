@@ -25,6 +25,9 @@ public:
 	void setIdleFunc(void (*func)(void));
 	void setTimerFunc(unsigned int msecs, void (*func)(int id), int id);
 
+public slots:
+	void aboutQGlut();
+
 protected slots:
 	void updateIdle();
 

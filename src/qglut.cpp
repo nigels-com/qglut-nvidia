@@ -66,9 +66,19 @@ extern "C"
 // QGLUT API
 //
 
+QApplication * QGLUT_APIENTRY qglutGetApplication()
+{
+	return s.app;
+}
+
+QMainWindow * QGLUT_APIENTRY qglutGetMainWindow(int window)
+{
+	return s.mainWindow;
+}
+
 WId QGLUT_APIENTRY qglutGetWindowID(int window)
 {
-  return s.window ? s.window->winId() : static_cast<WId>(0);
+	return s.window ? s.window->winId() : static_cast<WId>(0);
 }
 
 //
@@ -454,31 +464,31 @@ int QGLUT_APIENTRY glutGet(GLenum state)
 	glutAssert(false);
 
 	switch(state) {
-		case GLUT_WINDOW_X:                  return s.mainWindow->x();
-		case GLUT_WINDOW_Y:                  return s.mainWindow->y();
-		case GLUT_WINDOW_WIDTH:              return s.mainWindow->width();
-		case GLUT_WINDOW_HEIGHT:             return s.mainWindow->height();
-		case GLUT_WINDOW_BUFFER_SIZE:        return s.window->format().rgba() ?
+		case GLUT_WINDOW_X:			return s.mainWindow->x();
+		case GLUT_WINDOW_Y:			return s.mainWindow->y();
+		case GLUT_WINDOW_WIDTH:			return s.mainWindow->width();
+		case GLUT_WINDOW_HEIGHT:		return s.mainWindow->height();
+		case GLUT_WINDOW_BUFFER_SIZE:		return s.window->format().rgba() ?
 								s.window->format().redBufferSize()   +
 								s.window->format().greenBufferSize() +
 								s.window->format().blueBufferSize()  +
 								s.window->format().alphaBufferSize() : 0;
-		case GLUT_WINDOW_STENCIL_SIZE:       return s.window->format().stencilBufferSize();
-		case GLUT_WINDOW_DEPTH_SIZE:         return s.window->format().depthBufferSize();
-		case GLUT_WINDOW_RED_SIZE:           return s.window->format().rgba() ? s.window->format().redBufferSize()   : 0;
-		case GLUT_WINDOW_GREEN_SIZE:         return s.window->format().rgba() ? s.window->format().greenBufferSize() : 0;
-		case GLUT_WINDOW_BLUE_SIZE:          return s.window->format().rgba() ? s.window->format().blueBufferSize()  : 0;
-		case GLUT_WINDOW_ALPHA_SIZE:         return s.window->format().rgba() ? s.window->format().alphaBufferSize() : 0;
+		case GLUT_WINDOW_STENCIL_SIZE:		return s.window->format().stencilBufferSize();
+		case GLUT_WINDOW_DEPTH_SIZE:		return s.window->format().depthBufferSize();
+		case GLUT_WINDOW_RED_SIZE:		return s.window->format().rgba() ? s.window->format().redBufferSize()   : 0;
+		case GLUT_WINDOW_GREEN_SIZE:		return s.window->format().rgba() ? s.window->format().greenBufferSize() : 0;
+		case GLUT_WINDOW_BLUE_SIZE:		return s.window->format().rgba() ? s.window->format().blueBufferSize()  : 0;
+		case GLUT_WINDOW_ALPHA_SIZE:		return s.window->format().rgba() ? s.window->format().alphaBufferSize() : 0;
 		case GLUT_WINDOW_ACCUM_RED_SIZE:
 		case GLUT_WINDOW_ACCUM_GREEN_SIZE:
-		case GLUT_WINDOW_ACCUM_BLUE_SIZE:    return s.window->format().rgba() ? s.window->format().accumBufferSize() : 0;
-		case GLUT_WINDOW_ACCUM_ALPHA_SIZE:   return s.window->format().rgba() && s.window->format().alpha() ? s.window->format().accumBufferSize() : 0;
-		case GLUT_WINDOW_DOUBLEBUFFER:       return s.window->format().doubleBuffer()  ? 1 : 0;
-		case GLUT_WINDOW_RGBA:               return s.window->format().rgba() ? 1 : 0;
+		case GLUT_WINDOW_ACCUM_BLUE_SIZE:	return s.window->format().rgba() ? s.window->format().accumBufferSize() : 0;
+		case GLUT_WINDOW_ACCUM_ALPHA_SIZE:	return s.window->format().rgba() && s.window->format().alpha() ? s.window->format().accumBufferSize() : 0;
+		case GLUT_WINDOW_DOUBLEBUFFER:		return s.window->format().doubleBuffer()  ? 1 : 0;
+		case GLUT_WINDOW_RGBA:			return s.window->format().rgba() ? 1 : 0;
 
-		case GLUT_WINDOW_PARENT:             return 0; /* No children in QGlut         */
-		case GLUT_WINDOW_NUM_CHILDREN:       return 0; /* No children in QGlut         */
-		case GLUT_WINDOW_COLORMAP_SIZE:      return 0; /* QGlut supports only RGA mode */
+		case GLUT_WINDOW_PARENT:		return 0; /* No children in QGlut yet	   */
+		case GLUT_WINDOW_NUM_CHILDREN:		return 0; /* No children in QGlut yet	   */
+		case GLUT_WINDOW_COLORMAP_SIZE:		return 0; /* QGlut supports only RGA mode  */
 
 		// GLUT_WINDOW_NUM_SAMPLES
 		//     Number of samples for multisampling for the current window.

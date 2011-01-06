@@ -64,50 +64,6 @@ QGlutMainWindow::QGlutMainWindow(const QGLFormat & format)
 	QGlutWidget * widget = new QGlutWidget(format, this);
 	setCentralWidget(widget);
 	widget->setFocus();
-
-	// Create menu.
-	QAction * action = NULL;
-
-	QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
-
-	action = new QAction(tr("E&xit"), this);
-	action->setShortcut(tr("Ctrl+Q"));
-	action->setStatusTip(tr("Exit the application"));
-	connect(action, SIGNAL(triggered()), this, SLOT(close()));
-	fileMenu->addAction(action);
-
-	QMenu * settingsMenu = menuBar()->addMenu(tr("&Settings"));
-
-	action = new QAction(tr("&Toggle fullscreen"), this);
-	action->setShortcut(tr("Ctrl+Shift+F"));
-	action->setCheckable(true);
-	action->setChecked(false);
-	connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleFullScreen(bool)));
-	settingsMenu->addAction(action);
-	this->addAction(action);
-
-	action = new QAction(tr("&Show menu bar"), this);
-	action->setShortcut(tr("Ctrl+M"));
-	action->setCheckable(true);
-	action->setChecked(true);
-	connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleShowMenu(bool)));
-	settingsMenu->addAction(action);
-	this->addAction(action);
-	showMenu = true;
-
-	// @@ Add antialiasing settings?
-
-	QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
-
-	action = new QAction(tr("&About"), this);
-	action->setStatusTip(tr("Show the application's about box"));
-	//connect(action, SIGNAL(triggered()), this, SLOT(about()));
-	helpMenu->addAction(action);
-
-	action = new QAction(tr("About &Qt"), this);
-	action->setStatusTip(tr("Show the Qt library's about box"));
-	connect(action, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-	helpMenu->addAction(action);
 }
 
 QGlutMainWindow::~QGlutMainWindow()
